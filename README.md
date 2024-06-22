@@ -22,6 +22,10 @@ This application analyzes network connections established by various programs ru
    python main.py
    ```
     *(Optional)* To manually run with administrative privileges, right-click on the ``main.py`` file and select the ``Run as administrator`` option when running it.
+  
+   *The tool's initial appearance*.
+  ![image](https://github.com/dannythedev/network_traffic_analyzer/assets/99733108/fce98fbe-7053-4799-b830-87b7ed8fd044)
+
 - Click on the 'Get Processes' button to fetch and display network connections.
 - *(Optional, but recommended for enhanced functionality)* Click on the settings button to input and save your API key.
 - After viewing the processes, you'll see lists of programs and external IPs (outgoing traffic) below.
