@@ -1,14 +1,48 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-from Functions import validate_and_expand_ip, extract_ip
 from NetstatProcessor import NetstatProcessor
-from SettingsWindow import SettingsWindow
+from SettingsWindow import SettingsWindow, BG_COLOR
+
+
+def create_icon():
+    # Create a new PhotoImage object with a size of 128x128 pixels
+    icon = tk.PhotoImage(width=128, height=128)
+
+    # Define colors
+    green_light = "#00FF00"  # Bright green for the signal waves
+    green_dark = "#00B200"  # Dark green for the signal waves
+
+    # Draw the WiFi signal waves
+    # Arc 1 (outermost wave)
+    for x in range(20, 108):
+        for y in range(20, 108):
+            dist = ((x - 64) ** 2 + (y - 64) ** 2) ** 0.5
+            if 45 < dist < 55:
+                icon.put(green_light, (x, y))
+
+    # Arc 2 (middle wave)
+    for x in range(20, 108):
+        for y in range(20, 108):
+            dist = ((x - 64) ** 2 + (y - 64) ** 2) ** 0.5
+            if 35 < dist < 45:
+                icon.put(green_dark, (x, y))
+
+    # Arc 3 (innermost wave)
+    for x in range(20, 108):
+        for y in range(20, 108):
+            dist = ((x - 64) ** 2 + (y - 64) ** 2) ** 0.5
+            if 25 < dist < 35:
+                icon.put(green_light, (x, y))
+
+    return icon
 
 
 class NetstatGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Network Traffic Analyzer")
+        icon_image = create_icon()
+        self.root.iconphoto(True, icon_image)
         self.processor = NetstatProcessor()
         self.connections = []  # Store connections to allow sorting
         self.program_ips_dict = dict() # Dictionary to store program names and associated external IPs
@@ -31,11 +65,20 @@ class NetstatGUI:
         # Define scrollbar style
         style.configure("Custom.Vertical.TScrollbar",
                         background="#8599C8",
-                        troughcolor="#D9E3F1",
+                        troughcolor=BG_COLOR,
                         gripcount=0,
-                        bordercolor="#D9E3F1",
-                        darkcolor="#D9E3F1",
-                        lightcolor="#D9E3F1")
+                        bordercolor=BG_COLOR,
+                        darkcolor=BG_COLOR,
+                        lightcolor=BG_COLOR)
+
+        # Configure grid weights for layout responsiveness
+        self.root.grid_rowconfigure(1, weight=1)  # Result Treeview row
+        self.root.grid_rowconfigure(2, weight=1)  # Result Treeview row
+        self.root.grid_columnconfigure(0, weight=1)  # Left column
+        self.root.grid_columnconfigure(1, weight=1)  # Right column
+
+        # Set root background color
+        self.root.configure(bg=BG_COLOR)
 
     def create_widgets(self):
         # Create button to trigger netstat command
@@ -90,8 +133,8 @@ class NetstatGUI:
         self.agreement_var = tk.IntVar()
         self.agreement_check = tk.Checkbutton(self.root, text=agreement_text, variable=self.agreement_var,
                                               onvalue=1, offvalue=0, command=self.toggle_send_button,
-                                              bg="#D9E3F1", fg="#8599C8", selectcolor="#D9E3F1",
-                                              activebackground="#D9E3F1", activeforeground="#7878BE",
+                                              bg=BG_COLOR, fg="#8599C8", selectcolor=BG_COLOR,
+                                              activebackground=BG_COLOR, activeforeground="#7878BE",
                                               font=("Segoe UI", 10))
         self.agreement_check.grid(row=3, column=0, columnspan=2, padx=10, pady=5, sticky="w")
         self.agreement_check.grid_remove()
@@ -105,14 +148,6 @@ class NetstatGUI:
                                          bg="#FFA500", fg="white", relief=tk.FLAT)
         self.settings_button.grid(row=5, columnspan=2, padx=10, pady=10, sticky="nsew")
 
-        # Configure grid weights for layout responsiveness
-        self.root.grid_rowconfigure(1, weight=1)  # Result Treeview row
-        self.root.grid_rowconfigure(2, weight=1)  # Result Treeview row
-        self.root.grid_columnconfigure(0, weight=1)  # Left column
-        self.root.grid_columnconfigure(1, weight=1)  # Right column
-
-        # Set root background color
-        self.root.configure(bg="#D9E3F1")
 
     def open_settings_window(self):
         settings_window = SettingsWindow(self.root)
@@ -327,9 +362,3 @@ class NetstatGUI:
     def main(self):
         # Main function to start the GUI main loop
         self.root.mainloop()
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = NetstatGUI(root)
-    app.main()
-

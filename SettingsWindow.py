@@ -2,13 +2,14 @@ import tkinter as tk
 from tkinter import messagebox
 import json
 
+BG_COLOR = "#D9E3F1"
 
 class SettingsWindow:
     def __init__(self, parent):
         self.parent = parent
         self.settings_window = tk.Toplevel(parent)
         self.settings_window.title("Settings")
-        self.settings_window.configure(bg="#D9E3F1")
+        self.settings_window.configure(bg=BG_COLOR)
 
         self.keys_to_display = ['AbuseIPDB']  # Hardcoded list of keys to display
         self.api_keys = self.load_api_keys()
@@ -28,13 +29,13 @@ class SettingsWindow:
         # Create table headers
         headers = ["Key Name", "API Key Value"]
         for col, header in enumerate(headers):
-            label = tk.Label(self.settings_window, text=header, font=("Segoe UI", 10, "bold"), bg="#D9E3F1")
+            label = tk.Label(self.settings_window, text=header, font=("Segoe UI", 10, "bold"), bg=BG_COLOR)
             label.grid(row=0, column=col, padx=10, pady=5)
 
         # Populate table with existing API keys that match keys_to_display
         row = 1
         for key_name in self.keys_to_display:
-            key_name_label = tk.Label(self.settings_window, text=key_name, bg="#D9E3F1", relief=tk.FLAT, borderwidth=1)
+            key_name_label = tk.Label(self.settings_window, text=key_name, bg=BG_COLOR, relief=tk.FLAT, borderwidth=1)
             key_name_label.grid(row=row, column=0, padx=10, pady=5, sticky="nsew")
 
             if key_name in self.api_keys:
@@ -57,7 +58,7 @@ class SettingsWindow:
 
         PURPOSE_STRING = 'This program utilizes the AbuseIPDB API to retrieve data for external IPs selected from the process list. In cases where no API key is available, it falls back to using IPApi.com to gather the data. Please ensure you have an AbuseIPDB key specifically for abuse-related data.'
         # Label explaining the purpose of the program
-        purpose_label = tk.Label(self.settings_window, text=PURPOSE_STRING, font=("Segoe UI", 8), bg="#D9E3F1",
+        purpose_label = tk.Label(self.settings_window, text=PURPOSE_STRING, font=("Segoe UI", 8), bg=BG_COLOR,
                                  wraplength=400)
         purpose_label.grid(row=row + 1, columnspan=2, padx=10, pady=10, sticky="nsew")
 
